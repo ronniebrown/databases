@@ -25,7 +25,7 @@ module.exports = {
             res.sendStatus(201);
           });
         })
-    } // a function which handles posting a message to the database
+    } 
   },
 
   users: {
