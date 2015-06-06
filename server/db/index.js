@@ -1,23 +1,22 @@
-var mysql = require('mysql');
+var Sequelize = require('Sequelize');
+var orm = new Sequelize('chat', 'root');
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  port: "3000",
-  user: "root",
-  password: "",
-  database: "chat"
+var User = orm.define('User', {
+  username: Sequelize.STRING
 });
 
-// var connection = ...
+var Message = orm.define('Message', {
+  message: Sequelize.STRING,
+  roomname: Sequelize.STRING
+});
 
-module.exports = connection;
+User.hasMany(Message);
+Message.belongsTo(User);
 
-// connection.connect();
+User.sync();
+Message.sync();
 
-// connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-//   if (err) throw err;
+exports.User = User;
+exports.Message = Message;
 
-//   console.log('The solution is: ', rows[0].solution);
-// });
 
-// connection.end();

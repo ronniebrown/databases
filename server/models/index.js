@@ -8,8 +8,10 @@ db.connect(function(err) {
 module.exports = {
   messages: {
     get: function (cb) {
-      db.query('describe messages', function(err, results) {
-        console.log(results);
+      var queryStr = 'select messages.id, messages.message, messages.roomname, user.username from message \
+                      left outer join users on (message.userid = user.id) \
+                      order by messages.id desc';
+      db.query(queryStr, function(err, results) {
         if (err) {
           throw err;
         } else {
@@ -17,8 +19,11 @@ module.exports = {
         }
       });
     }, // a function which produces all the messages
-    post: function (cb) {
-      db.query('', function(err, results) {
+    post: function (params, cb) {
+      // todo insert into messages table
+      var queryStr = 'insert into messages(message, userid, roomname) \
+                      values (message, (select id from user where user = ? limit 1). ?)';
+      db.query(queryStr, params, function(err, results) {
         if (err) {
           throw err;
         } else {
@@ -31,7 +36,8 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (cb) {
-      db.query('select messages', function(err, results) {
+      var queryStr = 'select * from users';
+      db.query(queryStr, function(err, results) {
         if (err) {
           throw err;
         } else {
@@ -39,8 +45,9 @@ module.exports = {
         }
       });
     }, // a function which produces all the messages
-    post: function (cb) {
-      db.query('', function(err, results) {
+    post: function (params, cb) {
+      var queryStr = 'insert into users(username) values (?)';
+      db.query(queryStr, params, function(err, results) {
         if (err) {
           throw err;
         } else {
